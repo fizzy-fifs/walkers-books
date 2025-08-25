@@ -1,0 +1,6 @@
+@Walkers.Books.Api_HostAddress = http://localhost:5296
+
+GET {{Walkers.Books.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

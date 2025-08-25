@@ -1,0 +1,69 @@
+# Ignore JetBrains IDE directories (Rider, IntelliJ, WebStorm, etc.)
+.idea/
+.idea*
+
+# Visual Studio / .NET
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build outputs
+bin/
+obj/
+**/bin/
+**/obj/
+publish/
+out/
+
+# Rider / IntelliJ
+*.iml
+*.iws
+*.ipr
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# NuGet / packages
+*.nupkg
+packages/
+artifacts/
+project.lock.json
+
+# App settings and secrets (keep appsettings.json tracked)
+appsettings.*.json
+!appsettings.json
+
+# Logs, test results, coverage
+*.log
+logs/
+TestResults/
+coverage/
+coverage.*
+
+# Node / frontend
+node_modules/
+npm-debug.log*
+yarn-error.log
+.pnpm-debug.log
+dist/
+build/
+.cache/
+.parcel-cache/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor swap/temp files
+*~
+*.swp
+*.tmp
+*.temp
+
+# Misc
+*.seed
+*.pid
+*.pid.lock
