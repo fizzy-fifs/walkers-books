@@ -4,5 +4,5 @@ public class UpdateBookRequest
 {
     public Guid BookId { get; init; }
     public int? Rating { get; init; }
-    public List<string>? Comments { get; init; }
+    public string? Comment { get; init; }
 }

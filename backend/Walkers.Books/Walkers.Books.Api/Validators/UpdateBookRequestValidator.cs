@@ -14,14 +14,14 @@ namespace Walkers.Books.Api.Validators
                 .InclusiveBetween(1, 5).When(x => x.Rating.HasValue)
                 .WithMessage("Rating must be between 1 and 5.");
 
-            RuleFor(x => x.Comments)
+            RuleFor(x => x.Comment)
                 .NotNull().When(x => x.Rating.HasValue)
-                .WithMessage("Comments are required if rating is supplied.");
+                .WithMessage("Comment are required if rating is supplied.");
 
-            RuleForEach(x => x.Comments)
-                .MaximumLength(300).WithMessage("Each comment must be at most 300 characters.")
+            RuleFor(x => x.Comment)
+                .MaximumLength(300).WithMessage("Comment must be at most 300 characters.")
                 .Must(c => c == null || !c.ToLower().Contains("horrible"))
-                .WithMessage("Comments must not contain the word 'horrible'.");
+                .WithMessage("Comment must not contain the word 'horrible'.");
         }
     }
 }

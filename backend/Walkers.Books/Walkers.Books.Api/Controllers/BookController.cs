@@ -37,6 +37,56 @@ public class BookController(IBookService bookService)
         }
     }
 
+    [HttpPut("update")]
+    public async Task<ActionResult<Book>> UpdateBookAsync(UpdateBookRequest updateBookRequest)
+    {
+        var validationResult = await ValidateRequest(updateBookRequest);
+        if (!validationResult.IsValid)
+        {
+            return new BadRequestObjectResult(validationResult);
+        }
+        try
+        {
+            return await bookService.UpdateBookAsync(updateBookRequest);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return new NotFoundObjectResult(ex.Message);
+        }
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteBookAsync(Guid id)
+    {
+        try
+        {
+            await bookService.DeleteBookAsync(id);
+            return new NoContentResult();
+        }
+        catch (InvalidOperationException ex)
+        {
+            return new NotFoundObjectResult(ex.Message);
+        }
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Book>> GetBookByIdAsync(Guid id)
+    {
+        var book = await bookService.GetBookByIdAsync(id);
+        if (book == null)
+        {
+            return new NotFoundResult();
+        }
+        return new OkObjectResult(book);
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Book>>> GetBooksAsync([FromQuery] string? search, [FromQuery] string? sortBy, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    {
+        var books = await bookService.GetBooksAsync(search, sortBy, page, pageSize);
+        return new OkObjectResult(books);
+    }
+
     private static async Task<ValidationResult> ValidateRequest<T>(T request)
     {
         object validator = request switch
