@@ -2,7 +2,7 @@ namespace Walkers.Books.Api.Models;
 
 public class Book
 {
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
     public string Title { get; init; }
     public string Author { get; init; }
     public string ISBN { get; init; }
