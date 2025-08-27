@@ -5,7 +5,7 @@ using Walkers.Books.Api.Repositories;
 
 namespace Walkers.Books.Api.Services;
 
-public class BookService(IBookRepository bookRepository, ILogger<BookService> logger) : IBookService
+public class BookService(IBookRepository bookRepository, ILogger<IBookService> logger) : IBookService
 {
     public async Task<Book> CreateBookAsync(CreateBookRequest createBookRequest)
     {
