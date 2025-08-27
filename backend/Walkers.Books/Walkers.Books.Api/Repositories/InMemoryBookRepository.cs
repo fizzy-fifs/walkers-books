@@ -44,6 +44,9 @@ public class InMemoryBookRepository : IBookRepository
 
     public Task<Book> AddAsync(Book book)
     {
+        if (_books.Count >= 25)
+            throw new InvalidOperationException("Maximum of 25 books reached.");
+
         if (!_books.TryAdd(book.Id, book))
         {
             throw new InvalidOperationException("Book already exists.");

@@ -1,4 +1,5 @@
 using Walkers.Books.Api.Repositories;
+using Walkers.Books.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,7 +9,11 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddLogging();
+
 builder.Services.AddSingleton<IBookRepository, InMemoryBookRepository>();
+builder.Services.AddSingleton<IBookService, BookService>();
 
 
 var app = builder.Build();
