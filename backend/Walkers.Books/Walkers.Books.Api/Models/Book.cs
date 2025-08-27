@@ -8,6 +8,7 @@ public class Book
     public string ISBN { get; init; }
     public int? Rating { get; set; }
     public List<string>? Comments { get; set; }
-    public bool HasNotes => Comments is not null && Comments.Count > 0;
     public string? CoverImageUrl { get; init; }
+
+    public bool HasNotes => Comments is not null && Comments.Count > 0;
 }
