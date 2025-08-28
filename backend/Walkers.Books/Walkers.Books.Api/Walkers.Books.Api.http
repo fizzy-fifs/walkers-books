@@ -1,4 +1,41 @@
-GET {{HostAddress}}/weatherforecast/
+###
+# Create a new book
+POST {{HostAddress}}/api/v1.0/books/create
+Content-Type: application/json
+Accept: application/json
+
+{
+  "title": "Sample Book Title",
+  "author": "Author Name",
+  "isbn": "1234567890",
+  "publishedDate": "2023-01-01"
+}
+
+###
+# Update an existing book
+PUT {{HostAddress}}/api/v1.0/books/update
+Content-Type: application/json
+Accept: application/json
+
+{
+  "id": "00000000-0000-0000-0000-000000000000",
+  "rating": "4",
+  "comment": "I love this book!"
+}
+
+###
+# Delete a book by ID
+DELETE {{HostAddress}}/api/v1.0/books/00000000-0000-0000-0000-000000000000
+Accept: application/json
+
+###
+# Get a book by ID
+GET {{HostAddress}}/api/v1.0/books/00000000-0000-0000-0000-000000000000
+Accept: application/json
+
+###
+# Get a list of books (with optional query params)
+GET {{HostAddress}}/api/v1.0/books?search=sample&sortBy=title&page=1&pageSize=10
 Accept: application/json
 
 ###
