@@ -9,5 +9,5 @@ public interface IBookService
     Task<Book> UpdateBookAsync(UpdateBookRequest updateBookRequest);
     Task DeleteBookAsync(Guid bookId);
     Task<Book?> GetBookByIdAsync(Guid bookId);
-    Task<IEnumerable<Book>> GetBooksAsync(string? search, string? sortBy, int page, int pageSize);
+    Task<PagedResponse<Book>> GetBooksAsync(string? search, string? sortBy, int page, int pageSize);
 }

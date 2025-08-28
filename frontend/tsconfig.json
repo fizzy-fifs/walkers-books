@@ -50,5 +50,5 @@
     "src/**/*.d.ts",
     "src/**/*.tsx",
     "src/**/*.vue"
-  ]
+, "src/types/shims-vue.d.ts"  ]
 }

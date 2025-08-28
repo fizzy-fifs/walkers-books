@@ -81,10 +81,10 @@ public class BookController(IBookService bookService)
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Book>>> GetBooksAsync([FromQuery] string? search, [FromQuery] string? sortBy, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    public async Task<ActionResult<PagedResponse<Book>>> GetBooksAsync([FromQuery] string? search, [FromQuery] string? sortBy, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
     {
-        var books = await bookService.GetBooksAsync(search, sortBy, page, pageSize);
-        return new OkObjectResult(books);
+        var pagedBooks = await bookService.GetBooksAsync(search, sortBy, page, pageSize);
+        return new OkObjectResult(pagedBooks);
     }
 
     private static async Task<ValidationResult> ValidateRequest<T>(T request)

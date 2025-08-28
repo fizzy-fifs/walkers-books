@@ -64,7 +64,7 @@ public class BookService(IBookRepository bookRepository, ILogger<IBookService> l
         return await bookRepository.GetByIdAsync(bookId);
     }
 
-    public async Task<IEnumerable<Book>> GetBooksAsync(string? search, string? sortBy, int page, int pageSize)
+    public async Task<PagedResponse<Book>> GetBooksAsync(string? search, string? sortBy, int page, int pageSize)
     {
         bool sortAscending = true;
         if (!string.IsNullOrEmpty(sortBy) && sortBy.ToLower() == "desc")
@@ -72,7 +72,17 @@ public class BookService(IBookRepository bookRepository, ILogger<IBookService> l
             sortAscending = false;
         }
 
-        var (items, _) = await bookRepository.GetAllAsync(page, pageSize, search, sortAscending);
-        return items;
+        var (items, totalCount) = await bookRepository.GetAllAsync(page, pageSize, search, sortAscending);
+        int totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+        return new PagedResponse<Book>
+        {
+            Items = items,
+            TotalCount = totalCount,
+            Page = page,
+            PageSize = pageSize,
+            TotalPages = totalPages,
+            HasNextPage = page < totalPages,
+            HasPreviousPage = page > 1
+        };
     }
 }

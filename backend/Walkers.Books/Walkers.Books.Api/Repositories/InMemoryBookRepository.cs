@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using Walkers.Books.Api.Data;
 using Walkers.Books.Api.Models;
 
 namespace Walkers.Books.Api.Repositories;
@@ -6,6 +7,14 @@ namespace Walkers.Books.Api.Repositories;
 public class InMemoryBookRepository : IBookRepository
 {
     private readonly ConcurrentDictionary<Guid, Book> _books = new();
+
+    public InMemoryBookRepository()
+    {
+        foreach (var book in BookFactory.CreateBooks())
+        {
+            _books.TryAdd(book.Id, book);
+        }
+    }
 
     public Task<Book?> GetByIdAsync(Guid id)
     {
