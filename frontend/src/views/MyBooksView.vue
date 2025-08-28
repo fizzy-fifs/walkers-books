@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
 import BookCard from '../components/BookCard.vue'
+import AddBookModal from '../components/AddBookModal.vue'
 import { bookService } from '../services/bookService'
 import type { Book } from '../types/book'
-import { pa } from 'element-plus/es/locales.mjs'
+import { ArrowUp, ArrowDown } from '@element-plus/icons-vue'
 
 const books = ref<Book[]>([])
 const loading = ref(false)
@@ -12,9 +13,12 @@ const error = ref<string | null>(null)
 // Search, sort, pagination state
 const search = ref('')
 const sortBy = ref('title')
+const sortDirection = ref<'asc' | 'desc'>('asc')
 const page = ref(1)
 const pageSize = ref(10)
 const total = ref(0)
+
+const showAddModal = ref(false)
 
 const fetchBooks = async () => {
   loading.value = true
@@ -22,15 +26,14 @@ const fetchBooks = async () => {
   try {
     const response = await bookService.getBooks({
       search: search.value,
-      sortBy: sortBy.value,
+      sortBy: sortDirection.value === 'asc' ? 'asc' : 'desc',
       page: page.value,
       pageSize: pageSize.value,
     })
-    console.log('Response:', response);
-  books.value = response.items
-  page.value = response.page
-  pageSize.value = response.pageSize
-  total.value = response.totalCount
+    books.value = response.items
+    page.value = response.page
+    pageSize.value = response.pageSize
+    total.value = response.totalCount
   } catch (e: any) {
     // Convert technical errors into user-friendly messages
     const raw = e?.message || ''
@@ -43,7 +46,6 @@ const fetchBooks = async () => {
       if (msg.includes('unauthorized') || msg.includes('401')) return "You're not authorized to perform this action. Please sign in with the right account."
       if (msg.includes('forbid') || msg.includes('403')) return "You don't have permission to access this resource."
       if (msg.includes('not found') || msg.includes('404')) return 'Requested resource not found.'
-      // if server provided a friendly message already, prefer it (shorten long messages)
       if (raw && raw.length < 200) return raw
       return 'An unexpected error occurred. Please try again.'
     })()
@@ -54,7 +56,7 @@ const fetchBooks = async () => {
 }
 
 onMounted(fetchBooks)
-watch([search, sortBy, page], fetchBooks)
+watch([search, sortBy, sortDirection, page], fetchBooks)
 
 const handleSearch = () => {
   page.value = 1
@@ -69,18 +71,34 @@ const retry = () => {
   clearError()
   fetchBooks()
 }
+
+const openAddModal = () => {
+  showAddModal.value = true
+}
+const closeAddModal = () => {
+  showAddModal.value = false
+}
+const onAddSuccess = () => {
+  showAddModal.value = false
+  fetchBooks()
+}
+
+const toggleSortDirection = () => {
+  sortDirection.value = sortDirection.value === 'asc' ? 'desc' : 'asc'
+}
 </script>
 
 <template>
   <div class="my-books-view">
+    <AddBookModal :visible="showAddModal" @close="closeAddModal" @success="onAddSuccess" />
     <div class="header-row">
       <div>
         <h2>My Books</h2>
         <p>Track, rate, and manage your book collection.</p>
       </div>
-      <el-button type="primary">Add Book</el-button>
+      <el-button type="primary" @click="openAddModal">Add Book</el-button>
     </div>
-  <div class="search-row">
+    <div class="search-row">
       <el-input
         v-model="search"
         placeholder="Search by title or author..."
@@ -88,11 +106,13 @@ const retry = () => {
         @keyup.enter="handleSearch"
         clearable
       />
-      <el-select v-model="sortBy" placeholder="Sort by" class="sort-select">
+      <el-select v-model="sortBy" placeholder="Sort by" class="sort-select" disabled>
         <el-option label="Title" value="title" />
-        <el-option label="Author" value="author" />
-        <el-option label="Rating" value="rating" />
       </el-select>
+      <el-button @click="toggleSortDirection" class="sort-dir-btn" circle>
+        <el-icon v-if="sortDirection === 'asc'"><ArrowUp /></el-icon>
+        <el-icon v-else><ArrowDown /></el-icon>
+      </el-button>
     </div>
     <div v-if="loading" class="loading-row">
       <el-skeleton :rows="4" animated />
@@ -219,6 +239,9 @@ const retry = () => {
 }
 .error-alert {
   margin-top: 16px;
+}
+.sort-dir-btn {
+  margin-left: 8px;
 }
 @media (max-width: 1100px) {
   .main-content-card {
