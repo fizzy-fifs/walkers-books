@@ -73,7 +73,7 @@ const handleClose = () => {
   <el-dialog :model-value="props.visible" title="Edit Book" width="420px" @close="handleClose" :close-on-click-modal="false">
     <el-form :model="form" :rules="rules" ref="formRef" label-width="100px" status-icon>
       <el-form-item label="Rating" prop="rating">
-        <el-rate v-model="form.rating" :max="5" allow-half />
+        <el-rate v-model="form.rating" :max="5" />
       </el-form-item>
       <el-form-item label="Comment" prop="comment">
         <el-input v-model="form.comment" type="textarea" maxlength="300" show-word-limit />

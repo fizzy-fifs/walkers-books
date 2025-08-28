@@ -2,9 +2,12 @@
 import { ref, onMounted, watch } from 'vue'
 import BookCard from '../components/BookCard.vue'
 import AddBookModal from '../components/AddBookModal.vue'
+import EditBookModal from '../components/EditBookModal.vue'
+import ViewBookModal from '../components/ViewBookModal.vue'
+import DeleteBookModal from '../components/DeleteBookModal.vue'
 import { bookService } from '../services/bookService'
 import type { Book } from '../types/book'
-import { ArrowUp, ArrowDown } from '@element-plus/icons-vue'
+// icons: use legacy CSS icon classes to avoid named icon exports typing issues
 
 const books = ref<Book[]>([])
 const loading = ref(false)
@@ -19,6 +22,10 @@ const pageSize = ref(10)
 const total = ref(0)
 
 const showAddModal = ref(false)
+const showEditModal = ref(false)
+const showViewModal = ref(false)
+const showDeleteModal = ref(false)
+const selectedBook = ref<Book | null>(null)
 
 const fetchBooks = async () => {
   loading.value = true
@@ -83,6 +90,20 @@ const onAddSuccess = () => {
   fetchBooks()
 }
 
+const openEdit = (b: Book) => {
+  selectedBook.value = b
+  showEditModal.value = true
+}
+const closeEdit = () => { showEditModal.value = false; selectedBook.value = null }
+const onEditSuccess = () => { closeEdit(); fetchBooks() }
+
+const openView = (b: Book) => { selectedBook.value = b; showViewModal.value = true }
+const closeView = () => { showViewModal.value = false; selectedBook.value = null }
+
+const openDelete = (b: Book) => { selectedBook.value = b; showDeleteModal.value = true }
+const closeDelete = () => { showDeleteModal.value = false; selectedBook.value = null }
+const onDeleteSuccess = () => { closeDelete(); fetchBooks() }
+
 const toggleSortDirection = () => {
   sortDirection.value = sortDirection.value === 'asc' ? 'desc' : 'asc'
 }
@@ -90,7 +111,10 @@ const toggleSortDirection = () => {
 
 <template>
   <div class="my-books-view">
-    <AddBookModal :visible="showAddModal" @close="closeAddModal" @success="onAddSuccess" />
+  <AddBookModal :visible="showAddModal" @close="closeAddModal" @success="onAddSuccess" />
+  <EditBookModal :visible="showEditModal" :book="selectedBook" @close="closeEdit" @success="onEditSuccess" />
+  <ViewBookModal :visible="showViewModal" :book="selectedBook" @close="closeView" />
+  <DeleteBookModal :visible="showDeleteModal" :book="selectedBook" @close="closeDelete" @success="onDeleteSuccess" />
     <div class="header-row">
       <div>
         <h2>My Books</h2>
@@ -110,15 +134,15 @@ const toggleSortDirection = () => {
         <el-option label="Title" value="title" />
       </el-select>
       <el-button @click="toggleSortDirection" class="sort-dir-btn" circle>
-        <el-icon v-if="sortDirection === 'asc'"><ArrowUp /></el-icon>
-        <el-icon v-else><ArrowDown /></el-icon>
+        <el-icon v-if="sortDirection === 'asc'"><i class="el-icon-arrow-up"></i></el-icon>
+        <el-icon v-else><i class="el-icon-arrow-down"></i></el-icon>
       </el-button>
     </div>
     <div v-if="loading" class="loading-row">
       <el-skeleton :rows="4" animated />
     </div>
     <div v-else class="book-list">
-      <BookCard v-for="book in books" :key="book.id" :book="book" />
+  <BookCard v-for="book in books" :key="book.id" :book="book" @edit="openEdit" @view="openView" @delete="openDelete" />
       <div v-if="books.length === 0 && !error" class="no-books">No books found.</div>
     </div>
     <el-pagination
