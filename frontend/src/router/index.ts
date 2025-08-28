@@ -16,16 +16,7 @@ const routes: Array<RouteRecordRaw> = [
     name: 'MyBooks',
     component: () => import('../views/MyBooksView.vue'),
   },
-  {
-    path: '/analytics',
-    name: 'Analytics',
-    component: () => import('../views/AnalyticsView.vue'),
-  },
-  {
-    path: '/settings',
-    name: 'Settings',
-    component: () => import('../views/SettingsView.vue'),
-  },
+  // Analytics and Settings routes removed (out of scope)
 ]
 
 const router = createRouter({

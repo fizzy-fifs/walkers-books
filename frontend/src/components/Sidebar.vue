@@ -13,22 +13,16 @@
       active-text-color="#ffd04b"
       style="border-right: none;"
     >
-      <el-menu-item index="/dashboard">
-        <el-icon><i class="el-icon-s-home"></i></el-icon>
-        <span>Dashboard</span>
-      </el-menu-item>
-      <el-menu-item index="/books">
-        <el-icon><i class="el-icon-notebook-1"></i></el-icon>
-        <span>My Books</span>
-      </el-menu-item>
-      <el-menu-item index="/analytics">
-        <el-icon><i class="el-icon-data-analysis"></i></el-icon>
-        <span>Analytics</span>
-      </el-menu-item>
-      <el-menu-item index="/settings">
-        <el-icon><i class="el-icon-setting"></i></el-icon>
-        <span>Settings</span>
-      </el-menu-item>
+      <el-sub-menu index="/dashboard">
+        <template #title>
+          <el-icon><i class="el-icon-s-home"></i></el-icon>
+          <span>Dashboard</span>
+        </template>
+        <el-menu-item index="/books">
+          <el-icon><i class="el-icon-notebook-1"></i></el-icon>
+          <span>My Books</span>
+        </el-menu-item>
+      </el-sub-menu>
     </el-menu>
   </div>
 </template>
