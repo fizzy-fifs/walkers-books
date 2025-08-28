@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  backend:
+    build:
+      context: ./backend/Walkers.Books/Walkers.Books.Api
+      dockerfile: Dockerfile
+    image: walkers-books-backend:latest
+    ports:
+      - "49513:5000"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: walkers-books-frontend:latest
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
+# optional: add volumes or networks if needed
