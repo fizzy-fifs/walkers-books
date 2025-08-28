@@ -1,11 +1,15 @@
 <script setup lang="ts">
-// Layout and navigation will be scaffolded here
+import Sidebar from './components/Sidebar.vue'
 </script>
 
 <template>
-  <router-view />
+  <div style="display: flex; min-height: 100vh;">
+    <Sidebar />
+    <main style="flex: 1; background: #f5f6fa; padding: 32px;">
+      <router-view />
+    </main>
+  </div>
 </template>
 
 <style scoped>
-/* Add layout styles here */
 </style>
